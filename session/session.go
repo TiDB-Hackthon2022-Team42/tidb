@@ -1536,6 +1536,7 @@ func (s *session) Parse(ctx context.Context, sql string) ([]ast.StmtNode, error)
 	parseStartTime := time.Now()
 	stmts, warns, err := s.ParseSQL(ctx, sql, s.sessionVars.GetParseParams()...)
 	if err != nil {
+		logutil.Logger(ctx).Warn(fmt.Sprintf("daisai,err :%+v", err))
 		s.rollbackOnError(ctx)
 		err = util.SyntaxError(err)
 

@@ -137,6 +137,7 @@ import (
 	foreign           "FOREIGN"
 	from              "FROM"
 	fulltext          "FULLTEXT"
+	ttl               "TTL"
 	generated         "GENERATED"
 	grant             "GRANT"
 	group             "GROUP"
@@ -3523,7 +3524,7 @@ DropStatisticsStmt:
  *
  * TYPE type_name is recognized as a synonym for USING type_name. However, USING is the preferred form.
  *
- * CREATE [UNIQUE | FULLTEXT | SPATIAL] INDEX index_name
+ * CREATE [UNIQUE | FULLTEXT | SPATIAL | TTL ] INDEX index_name
  *     [index_type]
  *     ON tbl_name (key_part,...)
  *     [index_option]
@@ -3660,6 +3661,10 @@ IndexKeyTypeOpt:
 |	"FULLTEXT"
 	{
 		$$ = ast.IndexKeyTypeFullText
+	}
+|	"TTL"
+	{
+		$$ = ast.IndexKeyTypeTTL
 	}
 
 /**************************************AlterDatabaseStmt***************************************
