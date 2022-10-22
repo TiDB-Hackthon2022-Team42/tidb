@@ -1611,6 +1611,7 @@ const (
 	IndexKeyTypeUnique
 	IndexKeyTypeSpatial
 	IndexKeyTypeFullText
+	IndexKeyTypeTTL
 )
 
 // CreateIndexStmt is a statement to create an index.
@@ -1640,6 +1641,8 @@ func (n *CreateIndexStmt) Restore(ctx *format.RestoreCtx) error {
 		ctx.WriteKeyWord("SPATIAL ")
 	case IndexKeyTypeFullText:
 		ctx.WriteKeyWord("FULLTEXT ")
+	case IndexKeyTypeTTL:
+		ctx.WriteKeyWord("TTL ")
 	}
 	ctx.WriteKeyWord("INDEX ")
 	if n.IfNotExists {
