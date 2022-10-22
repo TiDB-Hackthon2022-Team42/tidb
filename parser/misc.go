@@ -752,6 +752,8 @@ var tokenMap = map[string]int{
 	"TRANSACTION":              transaction,
 	"TRIGGER":                  trigger,
 	"TRIGGERS":                 triggers,
+	"TTL":                      ttl,
+	"TTL_GRANULARITY":          ttlGranularity,
 	"TRIM":                     trim,
 	"TRUE":                     trueKwd,
 	"TRUNCATE":                 truncate,

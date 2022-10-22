@@ -2435,6 +2435,7 @@ func TestDDL(t *testing.T) {
 		{`create table t1 (c1 int) collate=binary;`, true, "CREATE TABLE `t1` (`c1` INT) DEFAULT COLLATE = BINARY"},
 		{`create table t1 (c1 int) collate=utf8mb4_0900_as_cs;`, true, "CREATE TABLE `t1` (`c1` INT) DEFAULT COLLATE = UTF8MB4_0900_AS_CS"},
 		{`create table t1 (c1 int) default charset=binary collate=binary;`, true, "CREATE TABLE `t1` (`c1` INT) DEFAULT CHARACTER SET = BINARY DEFAULT COLLATE = BINARY"},
+		{`create table t1 (c1 int) ttl=3600000 ttl_granularity="row";`, true, "CREATE TABLE `t1` (`c1` INT) TTL = 3600000 TTL_GRANULARITY = 'ROW'"},
 
 		// for table option `UNION`
 		{"ALTER TABLE t_n UNION ( ), KEY_BLOCK_SIZE = 1", true, "ALTER TABLE `t_n` UNION = (), KEY_BLOCK_SIZE = 1"},

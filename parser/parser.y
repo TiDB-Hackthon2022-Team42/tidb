@@ -610,6 +610,8 @@ import (
 	transaction           "TRANSACTION"
 	triggers              "TRIGGERS"
 	truncate              "TRUNCATE"
+	ttl                   "TTL"
+	ttlGranularity        "TTL_GRANULARITY"
 	unbounded             "UNBOUNDED"
 	uncommitted           "UNCOMMITTED"
 	undefined             "UNDEFINED"
@@ -4304,6 +4306,14 @@ PartDefOption:
 	{
 		$$ = &ast.TableOption{Tp: ast.TableOptionNodegroup, UintValue: $3.(uint64)}
 	}
+|	"TTL" EqOpt LengthNum
+	{
+		$$ = &ast.TableOption{Tp: ast.TableOptionTTL, UintValue: $3.(uint64)}
+	}
+|	"TTL_GRANULARITY" EqOpt StringName
+	{
+		$$ = &ast.TableOption{Tp: ast.TableOptionTTLGranularity, StrValue: strings.ToUpper($3)}
+	}
 |	PlacementPolicyOption
 	{
 		placementOptions := $1.(*ast.PlacementOption)
@@ -6346,6 +6356,8 @@ UnReservedKeyword:
 |	"CSV_SEPARATOR"
 |	"ON_DUPLICATE"
 |	"TIKV_IMPORTER"
+|	"TTL"
+|	"TTL_GRANULARITY"
 |	"REPLICAS"
 |	"POLICY"
 |	"WAIT"

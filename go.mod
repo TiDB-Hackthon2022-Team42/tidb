@@ -143,7 +143,10 @@ require (
 	github.com/coocood/bbloom v0.0.0-20190830030839-58deb6228d64 // indirect
 	github.com/coocood/rtutil v0.0.0-20190304133409-c84515f646f2 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
+	github.com/cznic/ebnf2y v0.0.0-20181122101858-6bf90c872098 // indirect
+	github.com/cznic/ebnfutil v0.0.0-20181122101858-3b2f19e42df8 // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
+	github.com/cznic/strutil v0.0.0-20171016134553-529a34b1c186 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/eapache/go-resiliency v1.2.0 // indirect
@@ -235,6 +238,10 @@ require (
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	modernc.org/ebnf v1.1.0 // indirect
+	modernc.org/ebnf2y v1.0.0 // indirect
+	modernc.org/ebnfutil v1.0.3 // indirect
+	modernc.org/strutil v1.1.3 // indirect
 	sigs.k8s.io/yaml v1.2.0 // indirect
 )
 

@@ -542,6 +542,11 @@ type TableInfo struct {
 	StatsOptions *StatsOptions `json:"stats_options"`
 
 	ExchangePartitionInfo *ExchangePartitionInfo `json:"exchange_partition_info"`
+
+	// TTL
+	TTL                 time.Duration
+	TTLByRow            bool
+	NextTTLTruncateTime time.Time
 }
 
 // TableCacheStatusType is the type of the table cache status
@@ -1130,6 +1135,7 @@ const (
 	PartitionTypeList       PartitionType = 3
 	PartitionTypeKey        PartitionType = 4
 	PartitionTypeSystemTime PartitionType = 5
+	PartitionTypeTTL                      = 6
 )
 
 func (p PartitionType) String() string {
@@ -1144,6 +1150,8 @@ func (p PartitionType) String() string {
 		return "KEY"
 	case PartitionTypeSystemTime:
 		return "SYSTEM_TIME"
+	case PartitionTypeTTL:
+		return "TTL"
 	default:
 		return ""
 	}
