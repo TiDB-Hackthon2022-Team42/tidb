@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/pingcap/tidb/ttl"
 	"runtime"
 	"strconv"
 	"strings"
@@ -570,7 +571,7 @@ func newDDL(ctx context.Context, options ...Option) *ddl {
 	}
 
 	variable.SwitchConcurrentDDL = d.SwitchConcurrentDDL
-
+	ttl.InitTTlChecker(opt.InfoCache)
 	return d
 }
 

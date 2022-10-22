@@ -21,6 +21,7 @@ package ddl
 import (
 	"context"
 	"fmt"
+	"github.com/pingcap/tidb/ttl"
 	"math"
 	"strconv"
 	"strings"
@@ -5818,7 +5819,14 @@ func (d *ddl) createIndex(ctx sessionctx.Context, ti ast.Ident, keyType ast.Inde
 		return dbterror.ErrUnsupportedIndexType.GenWithStack("TTL is testing by daisai")
 	}
 	// not support Spatial and FullText index
-	if keyType == ast.IndexKeyTypeFullText || keyType == ast.IndexKeyTypeSpatial {
+	// 骚操作, 放开 TTL 索引
+	if keyType == ast.IndexKeyTypeFullText || keyType == ast.IndexKeyTypeTTL {
+		// 把全文索引当 TTL 用
+		indexName.L += "_TTL"
+		indexName.O += "_ttl"
+		logutil.BgLogger().Warn(fmt.Sprintf("add ttl [%+v] index", indexName))
+	}
+	if keyType == ast.IndexKeyTypeSpatial {
 		return dbterror.ErrUnsupportedIndexType.GenWithStack("FULLTEXT and SPATIAL index is not supported")
 	}
 	unique := keyType == ast.IndexKeyTypeUnique
@@ -5883,6 +5891,24 @@ func (d *ddl) createIndex(ctx sessionctx.Context, ti ast.Ident, keyType ast.Inde
 	if err != nil {
 		return errors.Trace(err)
 	}
+	if strings.Contains(indexName.O, "_TTL") || strings.Contains(indexName.O, "_ttl") {
+		if len(indexColumns) != 1 {
+			return errors.Trace(dbterror.ErrWrongColumnName.GenWithStackByArgs("TTL Index only can influence one column"))
+		}
+		find := false
+		for _, col := range tblInfo.Columns {
+			if indexColumns[0].Name == col.Name {
+				find = true
+				if col.FieldType.GetType() == mysql.TypeTimestamp {
+					return errors.Trace(dbterror.ErrWrongColumnName.GenWithStackByArgs("TTL Index only can approve for Timestamp"))
+				}
+			}
+		}
+		if !find {
+			return errors.Trace(dbterror.ErrWrongColumnName.GenWithStackByArgs("can not find column in columns"))
+		}
+		keyType = ast.IndexKeyTypeNone
+	}
 
 	global := false
 	if unique && tblInfo.GetPartitionInfo() != nil {
@@ -5930,6 +5956,9 @@ func (d *ddl) createIndex(ctx sessionctx.Context, ti ast.Ident, keyType ast.Inde
 		return nil
 	}
 	err = d.callHookOnChanged(job, err)
+	if strings.Contains(indexName.O, "_TTL") || strings.Contains(indexName.O, "_ttl") {
+		ttl.AddTTl(schema.Name, t.Meta().Name, indexColumns[0].Name, indexName)
+	}
 	return errors.Trace(err)
 }
 
